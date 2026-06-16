@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PX to REM Converter — CSS Toolkit</title>
+  <meta name="description" content="Convert PX to REM and REM to PX instantly online. Set base font size and bulk convert multiple values. Free tool, no login required.">
+  <link rel="canonical" href="https://csstoolkit.net/px-to-rem/">
+  <meta property="og:title" content="PX to REM Converter — CSS Toolkit">
+  <meta property="og:description" content="Convert PX to REM and REM to PX instantly online. Free tool, no login required.">
+  <meta property="og:url" content="https://csstoolkit.net/px-to-rem/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="PX to REM Converter">
+  <meta name="twitter:description" content="Convert PX to REM and REM to PX. Set base font size and bulk convert multiple values.">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" />
+  <style>
+    .input-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px; }
+    .bulk-textarea { width:100%;background:#0f1117;border:1px solid #2d3148;border-radius:8px;padding:12px;color:#e2e8f0;font-size:14px;font-family:monospace;resize:vertical;box-sizing:border-box; }
+    .bulk-result { margin-top:12px;font-family:monospace;font-size:14px;color:#94a3b8;white-space:pre-line; }
+    .code-block { font-family:monospace;background:#1a1d27;padding:12px;border-radius:8px;color:#7c6af7;font-size:14px;line-height:1.8;margin-top:8px; }
+    .conv-table { width:100%;border-collapse:collapse;margin-top:8px;font-family:monospace;font-size:14px; }
+    .conv-table th { text-align:left;padding:8px 12px;background:#1a1d27;color:#7c6af7;font-weight:600; }
+    .conv-table td { padding:8px 12px;border-top:1px solid #2d3148;color:#94a3b8; }
+    .conv-table tr:hover td { background:#1a1d2760; }
+    .direction-tabs { display:flex;gap:8px;margin-bottom:20px; }
+    .direction-tab { flex:1;padding:10px;background:#1a1d27;border:1px solid #2d3148;border-radius:8px;color:#94a3b8;font-size:14px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s; }
+    .direction-tab.active { background:#7c6af720;border-color:#7c6af7;color:#7c6af7; }
+    .converter-section { display:none; }
+    .converter-section.active { display:block; }
+  </style>
+</head>
+<body>
+<header>
+  <a class="logo" href="/">CSS Toolkit</a>
+  <nav>
+    <a href="/">All Tools</a>
+    <a href="/blog/">Blog</a>
+    <a href="/about/">About</a>
+    <a href="/contact/">Contact</a>
+  </nav>
+</header>
+<main>
+<div class="container">
+  <h1>PX to REM Converter</h1>
+  <p class="subtitle">Convert pixel values to rem units and rem values back to pixels. Supports custom base font size.</p>
+
+  <div class="tool-card">
+    <div class="direction-tabs">
+      <div class="direction-tab active" id="tab-px-rem" onclick="switchTab('px-rem')">PX to REM</div>
+      <div class="direction-tab" id="tab-rem-px" onclick="switchTab('rem-px')">REM to PX</div>
+    </div>
+
+    <!-- PX to REM -->
+    <div class="converter-section active" id="section-px-rem">
+      <div class="input-grid">
+        <div>
+          <label for="px-input">Pixel Value (px)</label>
+          <input type="number" id="px-input" placeholder="16" value="16" aria-label="Enter pixel value to convert">
+        </div>
+        <div>
+          <label for="base-input">Base Font Size (px)</label>
+          <input type="number" id="base-input" placeholder="16" value="16" aria-label="Set base font size for conversion">
+        </div>
+      </div>
+      <label>Result</label>
+      <div class="result-box" id="result-px-rem" role="status" aria-live="polite">1rem</div>
+      <button class="copy-btn" onclick="copyResult('result-px-rem')">Copy Result</button>
+    </div>
+
+    <!-- REM to PX -->
+    <div class="converter-section" id="section-rem-px">
+      <div class="input-grid">
+        <div>
+          <label for="rem-input">REM Value</label>
+          <input type="number" id="rem-input" placeholder="1" value="1" step="0.01" aria-label="Enter rem value to convert">
+        </div>
+        <div>
+          <label for="base-input-2">Base Font Size (px)</label>
+          <input type="number" id="base-input-2" placeholder="16" value="16" aria-label="Set base font size for conversion">
+        </div>
+      </div>
+      <label>Result</label>
+      <div class="result-box" id="result-rem-px" role="status" aria-live="polite">16px</div>
+      <button class="copy-btn" onclick="copyResult('result-rem-px')">Copy Result</button>
+    </div>
+  </div>
+
+  <div class="tool-card">
+    <div class="direction-tabs">
+      <div class="direction-tab active" id="bulk-tab-px-rem" onclick="switchBulkTab('px-rem')">Bulk PX to REM</div>
+      <div class="direction-tab" id="bulk-tab-rem-px" onclick="switchBulkTab('rem-px')">Bulk REM to PX</div>
+    </div>
+
+    <div class="converter-section active" id="bulk-section-px-rem">
+      <label>Bulk Convert PX to REM (one value per line)</label>
+      <textarea id="bulk-px-input" class="bulk-textarea" rows="5"
+        placeholder="8&#10;12&#10;16&#10;24&#10;32"
+        aria-label="Enter multiple pixel values, one per line"></textarea>
+      <div id="bulk-px-result" class="bulk-result" role="status" aria-live="polite"></div>
+    </div>
+
+    <div class="converter-section" id="bulk-section-rem-px">
+      <label>Bulk Convert REM to PX (one value per line)</label>
+      <textarea id="bulk-rem-input" class="bulk-textarea" rows="5"
+        placeholder="0.5&#10;0.75&#10;1&#10;1.5&#10;2"
+        aria-label="Enter multiple rem values, one per line"></textarea>
+      <div id="bulk-rem-result" class="bulk-result" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div class="description">
+    <h2>What is REM in CSS?</h2>
+    <p>REM stands for Root EM. It is a CSS unit relative to the font size of the root element — the <code>&lt;html&gt;</code> tag. Unlike pixels which are fixed, REM scales with the user's browser font size setting. Unlike EM which is relative to the parent element, REM always refers to the same root value, making it consistent and predictable no matter how deeply nested your element is.</p>
+    <p>The default root font size in all browsers is 16px unless the user has changed it or the stylesheet overrides it. This means <code>1rem = 16px</code> by default.</p>
+
+    <h2>How to Convert PX to REM</h2>
+    <p>Divide the pixel value by the root font size:</p>
+    <div class="code-block">rem = px / root font size</div>
+    <p style="margin-top:12px;">Examples at 16px root:</p>
+    <div class="code-block">
+      24px / 16 = 1.5rem<br>
+      12px / 16 = 0.75rem<br>
+      32px / 16 = 2rem
+    </div>
+
+    <h2>How to Convert REM to PX</h2>
+    <p>Multiply the rem value by the root font size:</p>
+    <div class="code-block">px = rem x root font size</div>
+    <p style="margin-top:12px;">Examples at 16px root:</p>
+    <div class="code-block">
+      1.5rem x 16 = 24px<br>
+      0.75rem x 16 = 12px<br>
+      2rem x 16 = 32px<br>
+      0.875rem x 16 = 14px
+    </div>
+
+    <h2>PX to REM Conversion Table (16px base)</h2>
+    <table class="conv-table">
+      <thead><tr><th>PX</th><th>REM</th><th>Common Use</th></tr></thead>
+      <tbody>
+        <tr><td>8px</td><td>0.5rem</td><td>Extra small spacing</td></tr>
+        <tr><td>10px</td><td>0.625rem</td><td>Small text, captions</td></tr>
+        <tr><td>12px</td><td>0.75rem</td><td>Small text, labels</td></tr>
+        <tr><td>14px</td><td>0.875rem</td><td>Secondary text</td></tr>
+        <tr><td>16px</td><td>1rem</td><td>Base body text</td></tr>
+        <tr><td>18px</td><td>1.125rem</td><td>Slightly larger body</td></tr>
+        <tr><td>20px</td><td>1.25rem</td><td>Lead text</td></tr>
+        <tr><td>24px</td><td>1.5rem</td><td>H3 / subheadings</td></tr>
+        <tr><td>28px</td><td>1.75rem</td><td>H2 / section headings</td></tr>
+        <tr><td>32px</td><td>2rem</td><td>H1 / page headings</td></tr>
+        <tr><td>40px</td><td>2.5rem</td><td>Display headings</td></tr>
+        <tr><td>48px</td><td>3rem</td><td>Hero headings</td></tr>
+        <tr><td>64px</td><td>4rem</td><td>Large display text</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Why Use REM Instead of PX?</h2>
+
+    <h3>Accessibility</h3>
+    <p>Users can increase their default browser font size for readability. If your site uses px for font sizes, those sizes are fixed and ignore the user's preference. REM-based font sizes scale with the user's setting — this is a key accessibility requirement and good practice regardless.</p>
+
+    <h3>Global Scaling</h3>
+    <p>Change one value — the root font size — and every REM-based measurement on your site scales proportionally:</p>
+    <div class="code-block">
+      html { font-size: 16px; }<br><br>
+      @media (max-width: 768px) {<br>
+      &nbsp;&nbsp;html { font-size: 14px; }<br>
+      &nbsp;&nbsp;/* Everything in rem shrinks proportionally */<br>
+      }
+    </div>
+
+    <h3>Consistency Across Components</h3>
+    <p>Unlike EM which inherits from the parent and can compound unpredictably when nested, REM always refers to the same root value. This makes it reliable in design systems and component libraries where nesting depth varies.</p>
+
+    <h2>REM vs PX vs EM — When to Use Each</h2>
+    <ul>
+      <li><strong>REM</strong> — Font sizes, spacing, layout dimensions. Best for almost everything in modern CSS.</li>
+      <li><strong>PX</strong> — Borders (1px), box shadows, fine details where you need exact fixed control.</li>
+      <li><strong>EM</strong> — Padding inside components where the spacing should scale with the component's own font size.</li>
+      <li><strong>%</strong> — Widths and heights in fluid layouts.</li>
+      <li><strong>vh/vw</strong> — Full-screen sections, viewport-relative sizing.</li>
+    </ul>
+
+    <h2>How to Set Root Font Size</h2>
+    <p>Apply <code>font-size</code> to the <code>html</code> element, not <code>body</code>. Setting it on body does not affect rem calculations:</p>
+    <div class="code-block">
+      /* Correct — sets the rem base */<br>
+      html { font-size: 16px; }<br><br>
+      /* This does NOT affect rem */<br>
+      body { font-size: 16px; }
+    </div>
+
+    <h2>How to Use This Converter</h2>
+    <ol>
+      <li>Select <strong>PX to REM</strong> or <strong>REM to PX</strong> using the tabs</li>
+      <li>Enter your value and set the <strong>Base Font Size</strong> — default is 16px</li>
+      <li>The result updates instantly — click <strong>Copy Result</strong> to copy</li>
+      <li>For multiple values, use the <strong>Bulk Convert</strong> section — one value per line</li>
+    </ol>
+
+    <h2>Frequently Asked Questions</h2>
+
+    <h3>What is 1rem in pixels?</h3>
+    <p>By default, 1rem equals 16px in all browsers. If your project sets <code>html { font-size: 62.5%; }</code>, then 1rem equals 10px. If your root is set to 18px, then 1rem equals 18px.</p>
+
+    <h3>Should I use rem or px for font sizes?</h3>
+    <p>Use rem for font sizes in almost all cases. Pixel font sizes are fixed and override the user's browser font size preference, which is an accessibility issue. REM-based font sizes respect that preference.</p>
+
+    <h3>Does rem work the same as em?</h3>
+    <p>No. EM is relative to the parent element's font size and compounds when nested. REM is always relative to the root element and never compounds. A 0.75rem value is the same size anywhere on the page.</p>
+
+    <h3>What is the 62.5% trick?</h3>
+    <p>Setting <code>html { font-size: 62.5%; }</code> makes the root font size 10px (62.5% of the browser default 16px). This means 1rem = 10px, which makes mental math easier — 1.6rem = 16px, 2.4rem = 24px. It preserves accessibility because it is still percentage-based. The tradeoff is that you need to reset <code>body { font-size: 1.6rem; }</code> to restore the default text size.</p>
+
+    <h3>Can I mix rem and px in the same stylesheet?</h3>
+    <p>Yes, and it is common practice. Use rem for font sizes and most spacing. Use px for fine details like 1px borders and box-shadow blur values. Most design systems use this hybrid approach.</p>
+
+    <div class="related-posts">
+      <h2>Related articles</h2>
+      <div class="related-grid">
+        <a class="related-card" href="/blog/px-to-rem-css-guide/">
+          <h3>PX to REM: Complete Conversion Guide</h3>
+          <p>How rem works, conversion formulas, and when to use it.</p>
+        </a>
+        <a class="related-card" href="/blog/px-to-em-css-guide/">
+          <h3>PX to EM: Complete Conversion Guide</h3>
+          <p>How em works, parent-relative sizing, and conversion examples.</p>
+        </a>
+        <a class="related-card" href="/blog/css-units-guide/">
+          <h3>CSS Units Explained: px, rem, em, vw, vh and More</h3>
+          <p>A practical breakdown of every CSS unit and when to use each one.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<footer>
+  <p>© 2026 CSSToolkit.net — Free CSS Tools for Developers</p>
+  <p style="margin-top:8px;font-size:13px;">
+    <a href="/about/">About</a> ·
+    <a href="/blog/">Blog</a> ·
+    <a href="/contact/">Contact</a> ·
+    <a href="/privacy-policy/">Privacy Policy</a> ·
+    <a href="/disclaimer/">Disclaimer</a>
+  </p>
+  <p style="margin-top:8px;font-size:13px;">
+    Developed by <a href="/author/">Khalid Khan</a>
+  </p>
+  <p style="margin-top:8px;font-size:13px;">Follow me on:</p>
+  <div class="social-links">
+    <a href="https://www.facebook.com/csstoolkit" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+    <a href="https://twitter.com/css_toolkit" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+    <a href="https://www.linkedin.com/in/khalidks11" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+  </div>
+</footer>
+<script>
+  function switchTab(dir) {
+    document.getElementById('section-px-rem').classList.toggle('active', dir === 'px-rem');
+    document.getElementById('section-rem-px').classList.toggle('active', dir === 'rem-px');
+    document.getElementById('tab-px-rem').classList.toggle('active', dir === 'px-rem');
+    document.getElementById('tab-rem-px').classList.toggle('active', dir === 'rem-px');
+  }
+
+  function switchBulkTab(dir) {
+    document.getElementById('bulk-section-px-rem').classList.toggle('active', dir === 'px-rem');
+    document.getElementById('bulk-section-rem-px').classList.toggle('active', dir === 'rem-px');
+    document.getElementById('bulk-tab-px-rem').classList.toggle('active', dir === 'px-rem');
+    document.getElementById('bulk-tab-rem-px').classList.toggle('active', dir === 'rem-px');
+  }
+
+  function fmt(n) { return parseFloat(n.toFixed(4).replace(/\.?0+$/, '')); }
+
+  function convertPxToRem() {
+    const px = parseFloat(document.getElementById('px-input').value) || 0;
+    const base = parseFloat(document.getElementById('base-input').value) || 16;
+    if (base <= 0) { document.getElementById('result-px-rem').textContent = 'Invalid base'; return; }
+    document.getElementById('result-px-rem').textContent = fmt(px / base) + 'rem';
+  }
+
+  function convertRemToPx() {
+    const rem = parseFloat(document.getElementById('rem-input').value) || 0;
+    const base = parseFloat(document.getElementById('base-input-2').value) || 16;
+    if (base <= 0) { document.getElementById('result-rem-px').textContent = 'Invalid base'; return; }
+    document.getElementById('result-rem-px').textContent = fmt(rem * base) + 'px';
+  }
+
+  function bulkPxToRem() {
+    const base = parseFloat(document.getElementById('base-input').value) || 16;
+    const lines = document.getElementById('bulk-px-input').value.trim().split('\n');
+    document.getElementById('bulk-px-result').textContent = lines
+      .filter(l => l.trim() !== '')
+      .map(l => { const px = parseFloat(l); return isNaN(px) ? `${l.trim()} → invalid` : `${px}px → ${fmt(px / base)}rem`; })
+      .join('\n');
+  }
+
+  function bulkRemToPx() {
+    const base = parseFloat(document.getElementById('base-input-2').value) || 16;
+    const lines = document.getElementById('bulk-rem-input').value.trim().split('\n');
+    document.getElementById('bulk-rem-result').textContent = lines
+      .filter(l => l.trim() !== '')
+      .map(l => { const rem = parseFloat(l); return isNaN(rem) ? `${l.trim()} → invalid` : `${rem}rem → ${fmt(rem * base)}px`; })
+      .join('\n');
+  }
+
+  function copyResult(id) {
+    navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+      const activeSection = document.querySelector('.converter-section.active .copy-btn');
+      if (activeSection) {
+        const orig = activeSection.textContent;
+        activeSection.textContent = 'Copied!';
+        setTimeout(() => activeSection.textContent = orig, 2000);
+      }
+    }).catch(err => console.error('Failed to copy:', err));
+  }
+
+  document.getElementById('px-input').addEventListener('input', () => { convertPxToRem(); bulkPxToRem(); });
+  document.getElementById('base-input').addEventListener('input', () => { convertPxToRem(); bulkPxToRem(); });
+  document.getElementById('rem-input').addEventListener('input', () => { convertRemToPx(); bulkRemToPx(); });
+  document.getElementById('base-input-2').addEventListener('input', () => { convertRemToPx(); bulkRemToPx(); });
+  document.getElementById('bulk-px-input').addEventListener('input', bulkPxToRem);
+  document.getElementById('bulk-rem-input').addEventListener('input', bulkRemToPx);
+
+  convertPxToRem();
+  convertRemToPx();
+</script>
+</body>
+</html>
